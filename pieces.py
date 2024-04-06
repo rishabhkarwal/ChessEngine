@@ -117,5 +117,5 @@ class Queen:
         return Moves.getDiagonalMoves(self.index, self.isWhite) + Moves.getStraightMoves(self.index, self.isWhite)
 
 test = Queen(10, "q")
-print(test.getMoves())
+#print(test.getMoves())
 
