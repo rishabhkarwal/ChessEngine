@@ -11,25 +11,21 @@ class Translator:
         
         return ranks
     
-    def createBoard(self):
+    def createBoard(self, fill=" "):
         fenBoard = []
         for rank in self.ranks:
             fenBoard.append([*rank])
-        
-        board = {i:None for i in range(64)}
+
+        board = [fill for _ in range(64)]
         index = 0
         for rank in fenBoard:
             for square in rank:
                 if square.isnumeric():
                     index += int(square)
                 
-                elif square.isalpha():
+                if square.isalpha():
                     board[index] = str(square)
                     index += 1
-
         return board
     
-    def writeBoard(self):
-        for rank in self.board:
-            print(rank)
 

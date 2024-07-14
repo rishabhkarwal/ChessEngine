@@ -4,18 +4,13 @@ import time
 
 
 def main():
-    misc = engine.Engine()
-    brd = fen.Translator("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
-    brd = brd.board
-    misc.generate(brd)
-
-    board = art.draw(list(brd.values())) 
-    print(brd)
-    print(board)
-    misc.draw()
-
-    startTime = time.time()
-
-        
-if __name__ == "__main__":
+    board = fen.Translator('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1').board
+    abcd = engine.Engine(board)
+    abcd.draw_board()
+    print() 
+    #squares : list[str] = [f'{file}{rank}' for rank in '12345678' for file in 'abcdefgh']
+    #print(list(zip(squares, board)))
+    abcd.make_move("e2e3")
+    abcd.draw_board()
+if __name__ == '__main__':
     main()
