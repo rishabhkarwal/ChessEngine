@@ -13,3 +13,4 @@ class Game:
             self.colour = colour
             self.pieces = pieces
             self.timer = time.time()-time.time()
+        

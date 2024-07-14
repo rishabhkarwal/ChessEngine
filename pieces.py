@@ -88,8 +88,8 @@ class Moves:
         possible : list[int] = []
         for move in moves:
             temp = index + move
-            if temp > 63 and temp < 0:
-                break
+            if temp > 63 or temp < 0:
+                continue
             if board[temp]:
                 if board[temp].isupper() != colour:
                     possible += [temp]
@@ -126,5 +126,5 @@ class King:
         return Moves.getDiagonalMoves(self.index, self.isWhite) + Moves.getStraightMoves(self.index, self.isWhite)
 
 test = Queen(10, "q")
-#print(test.getMoves())
+# print(test.getMoves())
 

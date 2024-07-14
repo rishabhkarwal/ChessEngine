@@ -4,7 +4,7 @@ class Engine:
         self.board = [" "]*64
 
     def run(self):
-        print("INSERT SOMETHING NOT COOL")
+        print("HDIHAWEIH")
 
     def generate(self, board):
         for piece in board:
