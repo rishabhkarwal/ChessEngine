@@ -14,12 +14,13 @@ def main():
         if isalpha(square):
             kyrios.board[i] = pieces.Piece(i, square)
 
-    kyrios.draw_board(kyrios.board)
+    kyrios.draw_board()
     print()
+    print(kyrios.evaluate_board())
 
     one = kyrios.try_move("e2e3")
-    kyrios.draw_board()
-    kyrios.draw_board(one)
+    #kyrios.draw_board()
+    #kyrios.draw_board(one)
 
 if __name__ == '__main__':
     main()

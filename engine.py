@@ -1,3 +1,5 @@
+
+
 class Engine:
     def __init__(self, board):
         self.board = board
@@ -18,8 +20,16 @@ class Engine:
                 res += [move[i - 1 : i + 1]]
         return res
     
-    def evaluate_board(self, board):
-        print(board)
+    def evaluate_board(self, *args):
+        board = args[0] if len(args) == 1 else self.board.copy()
+        white = [square.piece for square in board if type(square) != str and (square.isWhite)]
+        black = [square.piece for square in board if type(square) != str and not(square.isWhite)]
+        print(white)
+        print(black)
+        print([square.index for square in white])
+        print([[piece.index for piece in white if piece.symbol == p] for p in "KQRBNP"])
+        #return white - black
+
         
     def try_move(self, move): 
         board = self.board.copy()

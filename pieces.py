@@ -1,3 +1,5 @@
+from pieceSquareTables import *
+
 #board = [
 #     0,  1,  2,  3,  4,  5,  6,  7,
 #     8,  9, 10, 11, 12, 13, 14, 15,
@@ -108,79 +110,91 @@ class Moves:
         return 0
     
 class Piece:
-    def __init__(self, index, piece):
+    def __init__(self, index, symbol):
         self.index = index
-        self.piece = piece
-        self.isWhite = True if piece.isupper() else False
-        self.assign_piece()
+        self.symbol = symbol
+        self.isWhite = True if symbol.isupper() else False
+        self.piece = self.assign_piece()
 
     def assign_piece(self):
-        if self.piece.upper() == "K":
+        if self.symbol.upper() == "K":
             return King(self.index)
         
-        elif self.piece.upper() == "Q":
+        elif self.symbol.upper() == "Q":
             return Queen(self.index)
         
-        elif self.piece.upper() == "R":
+        elif self.symbol.upper() == "R":
             return Rook(self.index)
         
-        elif self.piece.upper() == "B":
+        elif self.symbol.upper() == "B":
             return Bishop(self.index)
         
-        elif self.piece.upper() == "N":
+        elif self.symbol.upper() == "N":
             return Knight(self.index)
         
-        elif self.piece.upper() == "P":
+        elif self.symbol.upper() == "P":
             return Pawn(self.index)
         
     def __str__(self):
-        return str(self.piece)
+        return str(self.symbol)
     
 
 class Queen:
+    symbol = "Q"
     def __init__(self, index):
         self.value = 9
         self.index = index
+        self.mg_table, self.eg_table = mg_queen_table, eg_queen_table
 
     def getMoves(self):
         return Moves.getDiagonalMoves(self.index, self.isWhite) + Moves.getStraightMoves(self.index, self.isWhite)
     
 class King:
+    symbol = "K"
     def __init__(self, index):
-        self.value = float("inf")
+        self.value = 900#float("inf")
         self.index = index
+        self.mg_table, self.eg_table = mg_king_table, eg_king_table
 
     def getMoves(self):
         return Moves.getDiagonalMoves(self.index, self.isWhite) + Moves.getStraightMoves(self.index, self.isWhite) 
 
 class Rook:
+    symbol = "R"
     def __init__(self, index) -> None:
         self.value = 5
         self.index = index
+        self.mg_table, self.eg_table = mg_rook_table, eg_rook_table
 
     def getMoves(self):
         return Moves.getStraightMoves(self.index, self.isWhite)
     
 class Pawn:
+    symbol = "P"
     def __init__(self, index) -> None:
         self.value = 1
         self.index = index
+        self.mg_table, self.eg_table = mg_pawn_table, eg_pawn_table
 
     def getMoves(self):
         return Moves.getStraightMoves(self.index, self.isWhite)
     
 class Knight:
+    symbol = "N"
     def __init__(self, index) -> None:
         self.value = 3
         self.index = index
+        self.mg_table, self.eg_table = mg_knight_table, eg_knight_table
 
     def getMoves(self):
         return Moves.getStraightMoves(self.index, self.isWhite)
     
 class Bishop:
+    symbol = "B"
     def __init__(self, index) -> None:
         self.value = 3
         self.index = index
+        self.mg_table, self.eg_table = mg_bishop_table, eg_bishop_table
 
     def getMoves(self):
         return Moves.getStraightMoves(self.index, self.isWhite)
