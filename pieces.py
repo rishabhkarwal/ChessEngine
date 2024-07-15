@@ -84,7 +84,7 @@ class Moves:
     
     @staticmethod
     def getKnightMoves(index, colour): #L-Shapes
-        moves : list[int] = [+10, +17, +15, +6, -10, -17, -15, -6]
+        moves : list[int] = [+10, +17, +15, +6, -10, -17, -15, -6] #all L-shapes
         possible : list[int] = []
         for move in moves:
             temp = index + move
@@ -106,25 +106,82 @@ class Moves:
     @staticmethod
     def getCastleMoves(): #
         return 0
+    
+class Piece:
+    def __init__(self, index, piece):
+        self.index = index
+        self.piece = piece
+        self.isWhite = True if piece.isupper() else False
+        self.assign_piece()
+
+    def assign_piece(self):
+        if self.piece.upper() == "K":
+            return King(self.index)
+        
+        elif self.piece.upper() == "Q":
+            return Queen(self.index)
+        
+        elif self.piece.upper() == "R":
+            return Rook(self.index)
+        
+        elif self.piece.upper() == "B":
+            return Bishop(self.index)
+        
+        elif self.piece.upper() == "N":
+            return Knight(self.index)
+        
+        elif self.piece.upper() == "P":
+            return Pawn(self.index)
+        
+    def __str__(self):
+        return str(self.piece)
+    
 
 class Queen:
-    def __init__(self, index, piece):
-        self.value = 0
+    def __init__(self, index):
+        self.value = 9
         self.index = index
-        self.isWhite = True if piece.isupper() else False
 
     def getMoves(self):
         return Moves.getDiagonalMoves(self.index, self.isWhite) + Moves.getStraightMoves(self.index, self.isWhite)
     
 class King:
-    def __init__(self, index, piece):
-        self.value = 0
+    def __init__(self, index):
+        self.value = float("inf")
         self.index = index
-        self.isWhite = True if piece.isupper() else False
 
     def getMoves(self):
-        return Moves.getDiagonalMoves(self.index, self.isWhite) + Moves.getStraightMoves(self.index, self.isWhite)
+        return Moves.getDiagonalMoves(self.index, self.isWhite) + Moves.getStraightMoves(self.index, self.isWhite) 
 
-test = Queen(10, "q")
-# print(test.getMoves())
+class Rook:
+    def __init__(self, index) -> None:
+        self.value = 5
+        self.index = index
+
+    def getMoves(self):
+        return Moves.getStraightMoves(self.index, self.isWhite)
+    
+class Pawn:
+    def __init__(self, index) -> None:
+        self.value = 1
+        self.index = index
+
+    def getMoves(self):
+        return Moves.getStraightMoves(self.index, self.isWhite)
+    
+class Knight:
+    def __init__(self, index) -> None:
+        self.value = 3
+        self.index = index
+
+    def getMoves(self):
+        return Moves.getStraightMoves(self.index, self.isWhite)
+    
+class Bishop:
+    def __init__(self, index) -> None:
+        self.value = 3
+        self.index = index
+
+    def getMoves(self):
+        return Moves.getStraightMoves(self.index, self.isWhite)
 
