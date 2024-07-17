@@ -11,36 +11,35 @@ from pieceSquareTables import *
 #    56, 57, 58, 59, 60, 61, 62, 63
 #]
 
-board = {0: 'r', 1: 'n', 2: 'b', 3: 'q', 4: 'k', 5: 'b', 6: 'n', 7: 'r', 8: 'p', 9: 'p', 10: 'p', 11: 'p', 12: 'p', 13: 'p', 14: 'p', 15: 'p', 16: None, 17: None, 18: None, 19: None, 20: None, 21: None, 22: None, 23: None, 24: None, 25: None, 26: None, 27: None, 28: None, 29: None, 30: None, 31: None, 32: None, 33: None, 34: None, 35: None, 36: None, 37: None, 38: None, 39: None, 40: None, 41: None, 42: None, 43: None, 44: None, 45: None, 46: None, 47: None, 48: 'P', 49: 'P', 50: 'P', 51: 'P', 52: 'P', 53: 'P', 54: 'P', 55: 'P', 56: 'R', 57: 'N', 58: 'B', 59: 'Q', 60: 'K', 61: 'B', 62: 'N', 63: 'R'}
-
 class Moves:
+    board = []
     @staticmethod
-    def getStraightMoves(index, colour):
+    def getStraightMoves(index):
         possible : list[int] = []
         for i in range(index + 1, (index // 8 + 1) * 8): #to the right
-            if board[i]:
-                if board[i].isupper() != colour: #if diff colours
+            if Moves.board[i] != " ":
+                if Moves.board[i].isWhite != Moves.board[index].isWhite: #if diff colours
                     possible += [i]
                 break
             possible += [i]
 
         for i in range(index - 1, ((index // 8 ) * 8) - 1, -1): #to the left
-            if board[i]:
-                if board[i].isupper() != colour: #if diff colours
+            if Moves.board[i] != " ":
+                if Moves.board[i].isWhite != Moves.board[index].isWhite: #if diff colours
                     possible += [i]
                 break
             possible += [i]
 
         for i in range(index - 8, -1, -8): #up
-            if board[i]:
-                if board[i].isupper() != colour: #if diff colours
+            if Moves.board[i] != " ":
+                if Moves.board[i].isWhite != Moves.board[index].isWhite: #if diff colours
                     possible += [i]
                 break
             possible += [i]
 
         for i in range(index + 8, 64, +8): #dowm
-            if board[i]:
-                if board[i].isupper() != colour: #if diff colours
+            if Moves.board[i] != " ":
+                if Moves.board[i].isWhite != Moves.board[index].isWhite: #if diff colours
                     possible += [i]
                 break
             possible += [i]
@@ -48,25 +47,25 @@ class Moves:
         return possible
     
     @staticmethod
-    def getDiagonalMoves(index, colour):
+    def getDiagonalMoves(index):
         possible : list[int] = []
         for i in range(index + 9, 64, 9): #to the right down
-            if board[i]:
-                if board[i].isupper() != colour: #if diff colours
+            if Moves.board[i] != " ":
+                if Moves.board[i].isWhite != Moves.board[index].isWhite: #if diff colours
                     possible += [i]
                 break
             possible += [i]
 
         for i in range(index - 7, -1, -7): #to the right up
-            if board[i]:
-                if board[i].isupper() != colour: #if diff colours
+            if Moves.board[i] != " ":
+                if Moves.board[i].isWhite != Moves.board[index].isWhite: #if diff colours
                     possible += [i]
                 break
             possible += [i]
 
         for i in range(index + 7, 64, 7): #left down
-            if board[i]:
-                if board[i].isupper() != colour: #if diff colours
+            if Moves.board[i] != " ":
+                if Moves.board[i].isWhite != Moves.board[index].isWhite: #if diff colours
                     possible += [i]
                 break
 
@@ -76,8 +75,8 @@ class Moves:
             possible += [i]
 
         for i in range(index - 9, -1, -9): #left up
-            if board[i]:
-                if board[i].isupper() != colour: #if diff colours
+            if Moves.board[i] != " ":
+                if Moves.board[i].isWhite != Moves.board[index].isWhite: #if diff colours
                     possible += [i]
                 break
             possible += [i]
@@ -85,15 +84,17 @@ class Moves:
         return possible
     
     @staticmethod
-    def getKnightMoves(index, colour): #L-Shapes
+    def getKnightMoves(index): #L-Shapes
         moves : list[int] = [+10, +17, +15, +6, -10, -17, -15, -6] #all L-shapes
         possible : list[int] = []
         for move in moves:
             temp = index + move
+            
             if temp > 63 or temp < 0:
                 continue
-            if board[temp]:
-                if board[temp].isupper() != colour:
+            #print(index // 8 + 1, temp // 8 + 1)
+            if Moves.board[temp] != " ":
+                if Moves.board[temp].isWhite != Moves.board[index].isWhite:
                     possible += [temp]
                 continue
             possible += [temp]
@@ -110,92 +111,101 @@ class Moves:
         return 0
     
 class Piece:
-    def __init__(self, index, symbol):
-        self.index = index
-        self.symbol = symbol
-        self.isWhite = True if symbol.isupper() else False
-        self.piece = self.assign_piece()
+    @staticmethod
+    def assign_piece(index, symbol):
+        isWhite = True if symbol.isupper() else False
 
-    def assign_piece(self):
-        if self.symbol.upper() == "K":
-            return King(self.index)
+        if symbol.upper() == "K":
+            return King(index, isWhite)
         
-        elif self.symbol.upper() == "Q":
-            return Queen(self.index)
+        elif symbol.upper() == "Q":
+            return Queen(index, isWhite)
         
-        elif self.symbol.upper() == "R":
-            return Rook(self.index)
+        elif symbol.upper() == "R":
+            return Rook(index, isWhite)
         
-        elif self.symbol.upper() == "B":
-            return Bishop(self.index)
+        elif symbol.upper() == "B":
+            return Bishop(index, isWhite)
         
-        elif self.symbol.upper() == "N":
-            return Knight(self.index)
+        elif symbol.upper() == "N":
+            return Knight(index, isWhite)
         
-        elif self.symbol.upper() == "P":
-            return Pawn(self.index)
+        elif symbol.upper() == "P":
+            return Pawn(index, isWhite)
         
     def __str__(self):
         return str(self.symbol)
     
 
-class Queen:
-    symbol = "Q"
-    def __init__(self, index):
+class Queen: #Q
+    def __init__(self, index, isWhite):
         self.value = 9
+        self.symbol = "Q" if isWhite else "q"
         self.index = index
+        self.isWhite = isWhite
         self.mg_table, self.eg_table = mg_queen_table, eg_queen_table
 
-    def getMoves(self):
-        return Moves.getDiagonalMoves(self.index, self.isWhite) + Moves.getStraightMoves(self.index, self.isWhite)
+    def getMoves(self, board):
+        Moves.board = board
+        return Moves.getDiagonalMoves(self.index) + Moves.getStraightMoves(self.index)
     
-class King:
-    symbol = "K"
-    def __init__(self, index):
-        self.value = 900#float("inf")
+class King: #K
+    def __init__(self, index, isWhite):
+        self.value = 900 #float("inf")
+        self.symbol = "K" if isWhite else "k"
         self.index = index
+        self.isWhite = isWhite
         self.mg_table, self.eg_table = mg_king_table, eg_king_table
 
-    def getMoves(self):
-        return Moves.getDiagonalMoves(self.index, self.isWhite) + Moves.getStraightMoves(self.index, self.isWhite) 
+    def getMoves(self, board):
+        Moves.board = board
+        return Moves.getDiagonalMoves(self.index) + Moves.getStraightMoves(self.index) 
 
-class Rook:
-    symbol = "R"
-    def __init__(self, index) -> None:
+class Rook: #R
+    def __init__(self, index, isWhite) -> None:
         self.value = 5
+        self.symbol = "R" if isWhite else "r"
         self.index = index
+        self.isWhite = isWhite
         self.mg_table, self.eg_table = mg_rook_table, eg_rook_table
 
-    def getMoves(self):
-        return Moves.getStraightMoves(self.index, self.isWhite)
+    def getMoves(self, board):
+        Moves.board = board
+        return Moves.getStraightMoves(self.index)
     
-class Pawn:
-    symbol = "P"
-    def __init__(self, index) -> None:
+class Pawn: #P
+    def __init__(self, index, isWhite) -> None:
         self.value = 1
+        self.symbol = "P" if isWhite else "p"
         self.index = index
+        self.isWhite = isWhite
         self.mg_table, self.eg_table = mg_pawn_table, eg_pawn_table
 
-    def getMoves(self):
-        return Moves.getStraightMoves(self.index, self.isWhite)
+    def getMoves(self, board):
+        Moves.board = board
+        return Moves.getStraightMoves(self.index)
     
-class Knight:
-    symbol = "N"
-    def __init__(self, index) -> None:
+class Knight: #N
+    def __init__(self, index, isWhite) -> None:
         self.value = 3
+        self.symbol = "N" if isWhite else "n"
         self.index = index
+        self.isWhite = isWhite
         self.mg_table, self.eg_table = mg_knight_table, eg_knight_table
 
-    def getMoves(self):
-        return Moves.getStraightMoves(self.index, self.isWhite)
+    def getMoves(self, board):
+        Moves.board = board
+        return Moves.getKnightMoves(self.index)
     
-class Bishop:
-    symbol = "B"
-    def __init__(self, index) -> None:
+class Bishop: #B
+    def __init__(self, index, isWhite) -> None:
         self.value = 3
+        self.symbol = "B" if isWhite else "b"
         self.index = index
+        self.isWhite = isWhite
         self.mg_table, self.eg_table = mg_bishop_table, eg_bishop_table
 
-    def getMoves(self):
-        return Moves.getStraightMoves(self.index, self.isWhite)
+    def getMoves(self, board):
+        Moves.board = board
+        return Moves.getDiagonalMoves(self.index)
 
