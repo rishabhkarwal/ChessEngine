@@ -57,8 +57,10 @@ class Moves:
             possible += [i]
 
         for i in range(index - 7, -1, -7): #to the right up
+            print(index % 8, i % 8)
             if Moves.board[i] != " ":
                 if Moves.board[i].isWhite != Moves.board[index].isWhite: #if diff colours
+                    
                     possible += [i]
                 break
             possible += [i]

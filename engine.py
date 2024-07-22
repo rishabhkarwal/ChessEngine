@@ -27,10 +27,10 @@ class Engine:
                 print(piece.symbol)
                 for move in piece.getMoves(board):
                     
-                    print("\n")
+                    #print("\n")
                     one = self.try_move(self.index_to_algebraic([piece.index, move]))
-                    self.draw_board(one)
-                print("\n\n\n\n\n")
+                    #self.draw_board(one)
+                #print("\n\n\n\n\n")
         #print(white)
         #print(black)
         #print([square.index for squ5are in white])
