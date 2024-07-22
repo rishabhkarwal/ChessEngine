@@ -7,7 +7,7 @@ import time
 
 
 def main():
-    board = fen.Translator('rnbqkbnr/pppppppp/8/8/8/8/8/RNBQKBNR w KQkq - 0 1').board
+    board = fen.Translator('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1').board
     kyrios = engine.Engine(board)
     
     for i, square in enumerate(kyrios.board):

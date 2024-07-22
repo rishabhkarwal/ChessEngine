@@ -17,25 +17,32 @@ class Engine:
     def index_to_algebraic(self, move):
         return "".join("abcdefgh"[index % 8] + "87654321"[index // 8] for index in move)
     
+    def getLegalMoves(self, isWhite, *args):
+        board = args[0] if len(args) == 1 else self.board.copy()
+        pieces = [square for square in board if type(square) != str]
+        pieces = [piece for piece in pieces if piece.isWhite] if isWhite else [piece for piece in pieces if not piece.isWhite]
+        boards = []
+        for piece in pieces:
+            for move in piece.getMoves(board):
+                boards += [self.try_move(self.index_to_algebraic([piece.index, move]))]
+        return boards    
+            #moves = self.getLegalMoves(isWhite=True)
+        #for move in moves:
+            #self.draw_board(move)
+    
     def evaluate_board(self, *args):
         board = args[0] if len(args) == 1 else self.board.copy()
         pieces = [square for square in board if type(square) != str]
-        white = [piece for piece in pieces if piece.isWhite]
-        black = [piece for piece in pieces if not piece.isWhite]
-        for piece in white:
-            if piece.symbol == "B":
-                print(piece.symbol)
-                for move in piece.getMoves(board):
-                    
-                    #print("\n")
-                    one = self.try_move(self.index_to_algebraic([piece.index, move]))
-                    #self.draw_board(one)
-                #print("\n\n\n\n\n")
-        #print(white)
-        #print(black)
-        #print([square.index for squ5are in white])
-        #print([[piece.index for piece in white if piece.symbol == p] for p in "KQRBNP"])
-        #return white - black
+        w_score, b_score = 0, 0
+        for piece in pieces:
+            if piece.isWhite: w_score += piece.value * piece.mg_table[piece.index]
+            else: b_score += piece.value * piece.mg_table[63 - piece.index]
+            print(piece.symbol, piece.isWhite, w_score, b_score)
+            print(piece.value, piece.index, 63 - piece.index)
+        
+        print(w_score, b_score)
+
+
 
     def try_move(self, move): 
         board = self.board.copy()
