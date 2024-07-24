@@ -1,6 +1,5 @@
 from curses.ascii import isalpha
 import fen, art, engine, pieces
-from board import Board
 import time
 
 
@@ -15,9 +14,9 @@ def main():
 
     kyrios.draw_board(kyrios.board)
     print()
-    kyrios.search_moves(1, kyrios.board, True)
+    kyrios.find_best_move(3, kyrios.board, True)
     #kyrios.evaluate_board()
-
+    #self.getLegalMoves(isWhite=True if turnMultiplier == 1 else False)
     #one = kyrios.try_move("e2e3")
     #kyrios.draw_board()
     #two = kyrios.index_to_algebraic([52, 36])

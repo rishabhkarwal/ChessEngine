@@ -191,10 +191,9 @@ class Queen: #Q
         self.index = index
         self.isWhite = isWhite
         self.mg_table, self.eg_table = mg_queen_table, eg_queen_table
-        #if not isWhite:
-            #self.mg_table, self.eg_table = self.mg_table[::-1], self.eg_table[::-1]
+        
 
-    def getMoves(self, board):
+    def get_moves(self, board):
         Moves.board = board
         return Moves.getDiagonalMoves(self.index) + Moves.getStraightMoves(self.index)
     
@@ -205,10 +204,9 @@ class King: #K
         self.index = index
         self.isWhite = isWhite
         self.mg_table, self.eg_table = mg_king_table, eg_king_table
-        #if not isWhite:
-            #self.mg_table, self.eg_table = self.mg_table[::-1], self.eg_table[::-1]
+        
 
-    def getMoves(self, board):
+    def get_moves(self, board):
         Moves.board = board
         return Moves.getKingMoves(self.index)
 
@@ -219,10 +217,9 @@ class Rook: #R
         self.index = index
         self.isWhite = isWhite
         self.mg_table, self.eg_table = mg_rook_table, eg_rook_table
-        #if not isWhite:
-            #self.mg_table, self.eg_table = self.mg_table[::-1], self.eg_table[::-1]
+        
 
-    def getMoves(self, board):
+    def get_moves(self, board):
         Moves.board = board
         return Moves.getStraightMoves(self.index)
     
@@ -233,12 +230,12 @@ class Pawn: #P
         self.index = index
         self.isWhite = isWhite
         self.mg_table, self.eg_table = mg_pawn_table, eg_pawn_table
-        #if not isWhite:
-            #self.mg_table, self.eg_table = self.mg_table[::-1], self.eg_table[::-1]
+        self.startRank = 6 if isWhite else 1
 
-    def getMoves(self, board):
+    def get_moves(self, board):
         Moves.board = board
-        return Moves.getPawnMoves(self.index, self.isWhite, True)
+        hasMoved = True if self.index // 8 != self.startRank else False
+        return Moves.getPawnMoves(self.index, self.isWhite, hasMoved)
     
 class Knight: #N
     def __init__(self, index, isWhite) -> None:
@@ -247,10 +244,9 @@ class Knight: #N
         self.index = index
         self.isWhite = isWhite
         self.mg_table, self.eg_table = mg_knight_table, eg_knight_table
-        #if not isWhite:
-            #self.mg_table, self.eg_table = self.mg_table[::-1], self.eg_table[::-1]
+        
 
-    def getMoves(self, board):
+    def get_moves(self, board):
         Moves.board = board
         return Moves.getKnightMoves(self.index)
     
@@ -261,10 +257,9 @@ class Bishop: #B
         self.index = index
         self.isWhite = isWhite
         self.mg_table, self.eg_table = mg_bishop_table, eg_bishop_table
-        #if not isWhite:
-            #self.mg_table, self.eg_table = self.mg_table[::-1], self.eg_table[::-1]
+        
 
-    def getMoves(self, board):
+    def get_moves(self, board):
         Moves.board = board
         return Moves.getDiagonalMoves(self.index)
 
