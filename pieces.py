@@ -1,4 +1,8 @@
+from re import M
+
+from chess import Move
 from pieceSquareTables import *
+from collections import namedtuple
 
 #board = [
 #     0,  1,  2,  3,  4,  5,  6,  7,
@@ -10,127 +14,146 @@ from pieceSquareTables import *
 #    48, 49, 50, 51, 52, 53, 54, 55,
 #    56, 57, 58, 59, 60, 61, 62, 63
 #]
+MOVE = namedtuple("MOVE", ["start", "end", "weight"])
+CAPTURE_MULTIPLIER = 10
+
 
 class Moves:
     board = []
     @staticmethod
     def getStraightMoves(index):
-        possible : list[int] = []
+        start_square = Moves.board[index]
+        possible : list[MOVE] = []
+
         for i in range(index + 1, (index // 8 + 1) * 8): #to the right
-            if Moves.board[i] != " ":
-                if Moves.board[i].is_white != Moves.board[index].is_white: #if diff colours
-                    possible += [i]
+            end_square = Moves.board[i]
+            if end_square != " ": #if the square is empty
+                if end_square.is_white != start_square.is_white: #if different colours
+                    possible += [MOVE(index, i, end_square.value * CAPTURE_MULTIPLIER)]
                 break
-            possible += [i]
+            possible += [MOVE(index, i, 0)]
 
         for i in range(index - 1, ((index // 8 ) * 8) - 1, -1): #to the left
-            if Moves.board[i] != " ":
-                if Moves.board[i].is_white != Moves.board[index].is_white: #if diff colours
-                    possible += [i]
+            end_square = Moves.board[i]
+            if end_square != " ": #if the square is empty
+                if end_square.is_white != start_square.is_white: #if different colours
+                    possible += [MOVE(index, i, end_square.value * CAPTURE_MULTIPLIER)]
                 break
-            possible += [i]
+            possible += [MOVE(index, i, 0)]
 
         for i in range(index - 8, -1, -8): #up
-            if Moves.board[i] != " ":
-                if Moves.board[i].is_white != Moves.board[index].is_white: #if diff colours
-                    possible += [i]
+            end_square = Moves.board[i]
+            if end_square != " ": #if the square is empty
+                if end_square.is_white != start_square.is_white: #if different colours
+                    possible += [MOVE(index, i, end_square.value * CAPTURE_MULTIPLIER)]
                 break
-            possible += [i]
+            possible += [MOVE(index, i, 0)]
 
         for i in range(index + 8, 64, +8): #dowm
-            if Moves.board[i] != " ":
-                if Moves.board[i].is_white != Moves.board[index].is_white: #if diff colours
-                    possible += [i]
+            end_square = Moves.board[i]
+            if end_square != " ": #if the square is empty
+                if end_square.is_white != start_square.is_white: #if different colours
+                    possible += [MOVE(index, i, end_square.value * CAPTURE_MULTIPLIER)]
                 break
-            possible += [i]
+            possible += [MOVE(index, i, 0)]
 
         return possible
     
     @staticmethod
     def getDiagonalMoves(index):
-        possible : list[int] = []
+        start_square = Moves.board[index]
+        possible : list[MOVE] = []
+        
         for i in range(index + 9, 64, 9): #to the right down
             if abs((i - 9) % 8 - i % 8) != 1: #stops pieces teleporting
                 break
-            if Moves.board[i] != " ":
-                if Moves.board[i].is_white != Moves.board[index].is_white: #if diff colours
-                    possible += [i]
+            end_square = Moves.board[i]
+            if end_square != " ": #if the square is empty
+                if end_square.is_white != start_square.is_white: #if different colours
+                    possible += [MOVE(index, i, end_square.value * CAPTURE_MULTIPLIER)]
                 break
-            possible += [i]
+            possible += [MOVE(index, i, 0)]
 
         for i in range(index - 7, -1, -7): #to the right up
             if abs((i + 7) % 8 - i % 8) != 1: #stops pieces teleporting
                 break
-            if Moves.board[i] != " ":
-                if Moves.board[i].is_white != Moves.board[index].is_white: #if diff colours
-                    
-                    possible += [i]
+            end_square = Moves.board[i]
+            if end_square != " ": #if the square is empty
+                if end_square.is_white != start_square.is_white: #if different colours
+                    possible += [MOVE(index, i, end_square.value * CAPTURE_MULTIPLIER)]
                 break
-            possible += [i]
+            possible += [MOVE(index, i, 0)]
 
         for i in range(index + 7, 64, 7): #left down
-            if abs((i - 7) % 8 - i % 8) != 1: #stops pieces teleporting
+            end_square = Moves.board[i]
+            if end_square != " ": #if the square is empty
+                if end_square.is_white != start_square.is_white: #if different colours
+                    possible += [MOVE(index, i, end_square.value * CAPTURE_MULTIPLIER)]
                 break
-            if Moves.board[i] != " ":
-                if Moves.board[i].is_white != Moves.board[index].is_white: #if diff colours
-                    possible += [i]
-                break
-
+            
             if (i - 7) % 8 == 0:
                 break
 
-            possible += [i]
+            possible += [MOVE(index, i, 0)]
 
         for i in range(index - 9, -1, -9): #left up
             if abs((i + 9) % 8 - i % 8) != 1: #stops pieces teleporting
                 break
-            if Moves.board[i] != " ":
-                if Moves.board[i].is_white != Moves.board[index].is_white: #if diff colours
-                    possible += [i]
+            end_square = Moves.board[i]
+            if end_square != " ": #if the square is empty
+                if end_square.is_white != start_square.is_white: #if different colours
+                    possible += [MOVE(index, i, end_square.value * CAPTURE_MULTIPLIER)]
                 break
-            possible += [i]
+            possible += [MOVE(index, i, 0)]
 
         return possible
     
     @staticmethod
     def getKnightMoves(index): #L-Shapes
+        start_square = Moves.board[index]
         moves : list[int] = [+10, +17, +15, +6, -10, -17, -15, -6] #all L-shapes
-        possible : list[int] = []
+        possible : list[MOVE] = []
         for move in moves:
-            temp = index + move
+            i = index + move
             
-            if temp > 63 or temp < 0:
+            if i > 63 or i < 0:
                 continue
-            if abs(index % 8 - temp % 8) > 2: #stops pieces teleporting
+            if abs(index % 8 - i % 8) > 2: #stops pieces teleporting
                 continue
-            if Moves.board[temp] != " ":
-                if Moves.board[temp].is_white != Moves.board[index].is_white:
-                    possible += [temp]
+
+            end_square = Moves.board[i]
+            if end_square != " ":
+                if end_square.is_white != start_square.is_white:
+                    possible += [MOVE(index, i, end_square.value * CAPTURE_MULTIPLIER)]
                 continue
-            possible += [temp]
+            possible += [MOVE(index, i, 0)]
                 
         return possible
         
     
     @staticmethod
     def getPawnMoves(index, is_white, hasMoved): #en-Passant
+        start_square = Moves.board[index]
         moves : list[int] = [-8, -16] if is_white else [+8, +16]
         moves = moves[:1] if hasMoved else moves
         takes : list[int] = [-7, -9] if is_white else [+7, +9]
-        possible : list[int] = []
+        possible : list[MOVE] = []
         for move in moves + takes:
-            temp = index + move
-            if temp > 63 or temp < 0:
+            i = index + move
+            
+            if i > 63 or i < 0:
                 continue
-            if abs(index % 8 - temp % 8) > 1: #stops pieces teleporting
+            if abs(index % 8 - i % 8) > 1: #stops pieces teleporting
                 continue
-            if Moves.board[temp] != " ":
-                if Moves.board[temp].is_white != Moves.board[index].is_white:
-                    possible += [temp]
+
+            end_square = Moves.board[i]
+            if end_square != " ":
+                if end_square.is_white != Moves.board[index].is_white:
+                    possible += [MOVE(index, i, end_square.value * CAPTURE_MULTIPLIER)]
                 continue
             if move in takes:
                 continue
-            possible += [temp]
+            possible += [MOVE(index, i, 0)]
 
         return possible
     
@@ -140,20 +163,23 @@ class Moves:
     
     @staticmethod
     def getKingMoves(index):
+        start_square = Moves.board[index]
         moves : list[int] = [-8, +8, -1, +1, -7, -9, +7, +9] #up, down, left, right, up-right, up-left, down-right, down-left: 1 space
-        possible : list[int] = []
+        possible : list[MOVE] = []
         for move in moves:
-            temp = index + move
-            
-            if temp > 63 or temp < 0:
+            i = index + move
+        
+            if i > 63 or i < 0:
                 continue
-            if abs(index % 8 - temp % 8) > 1: #stops pieces teleporting
+            if abs(index % 8 - i % 8) > 1: #stops pieces teleporting
                 continue
-            if Moves.board[temp] != " ":
-                if Moves.board[temp].is_white != Moves.board[index].is_white:
-                    possible += [temp]
+
+            end_square = Moves.board[i]
+            if end_square != " ":
+                if end_square.is_white != start_square.is_white:
+                    possible += [MOVE(index, i, end_square.value * CAPTURE_MULTIPLIER)]
                 continue
-            possible += [temp]
+            possible += [MOVE(index, i, 0)]
                 
         return possible
     
@@ -192,7 +218,6 @@ class Queen: #Q
         self.is_white = is_white
         self.mg_table, self.eg_table = mg_queen_table, eg_queen_table
         
-
     def get_moves(self, board):
         Moves.board = board
         return Moves.getDiagonalMoves(self.index) + Moves.getStraightMoves(self.index)

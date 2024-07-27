@@ -4,6 +4,7 @@ from board import Board
 import pieces
 from pieceSquareTables import flip
 from collections import namedtuple
+from random import shuffle
 
 #Piece = namedtuple("Piece", ["index", "piece"])
 
@@ -28,7 +29,7 @@ class Engine:
         for index, piece in pieces:
             piece.index = index
             for move in piece.get_moves(board):
-                moves += [self.index_to_algebraic([piece.index, move])]
+                moves += [move]
         return moves   
     
     def find_best_move(self, board): 
@@ -37,20 +38,20 @@ class Engine:
         board.update_board(self.make_move(board.board, self.best_move)[1])
         #return self.make_move(board.board, self.best_move)[1]
     
-    def negamax(self, depth : int, color : int, alpha : float, beta : float, board : Board):
+    def negamax(self, depth : int, colour : int, alpha : float, beta : float, board : Board):
         if depth == 0:
-            evaluation = color * board.evaluate_board()
-            return evaluation
+            return colour * board.evaluate_board()
         
-        legal_moves = self.get_legal_moves(color == 1, board.board)
+        legal_moves = self.get_legal_moves(colour == 1, board.board)
+        shuffle(legal_moves)
         best_score = float('-inf')
 
         for move in legal_moves:
-            old_board, new_board = self.make_move(board.board, move)
+            old_board, new_board, weight = self.make_move(board.board, move)
             
             board.update_board(new_board)
 
-            score = -self.negamax(depth - 1, -color, -beta, -alpha, board)
+            score = -(self.negamax(depth - 1, -colour, -beta, -alpha, board) + colour * weight)
 
             board.update_board(old_board)
 
@@ -66,7 +67,6 @@ class Engine:
 
     def make_move(self, initial_board, move):
         board = deepcopy(initial_board)
-        start, end = self.algebraic_to_index(move)
-        board[end] = board[start]
-        board[start] = ' '
-        return initial_board, board
+        board[move.end] = board[move.start]
+        board[move.start] = ' '
+        return initial_board, board, move.weight
