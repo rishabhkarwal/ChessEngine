@@ -15,7 +15,7 @@ from collections import namedtuple
 #    56, 57, 58, 59, 60, 61, 62, 63
 #]
 MOVE = namedtuple("MOVE", ["start", "end", "weight"])
-CAPTURE_MULTIPLIER = 10
+CAPTURE_MULTIPLIER = 50
 
 
 class Moves:
@@ -148,7 +148,7 @@ class Moves:
 
             end_square = Moves.board[i]
             if end_square != " ":
-                if end_square.is_white != Moves.board[index].is_white:
+                if end_square.is_white != start_square.is_white:
                     possible += [MOVE(index, i, end_square.value * CAPTURE_MULTIPLIER)]
                 continue
             if move in takes:
@@ -224,7 +224,7 @@ class Queen: #Q
     
 class King: #K
     def __init__(self, index, is_white):
-        self.value = 20000# if is_white else -900
+        self.value = 200000# if is_white else -900
         self.symbol = "K" if is_white else "k"
         self.index = index
         self.is_white = is_white

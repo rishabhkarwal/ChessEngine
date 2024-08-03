@@ -5,22 +5,24 @@ import pieces
 from pieceSquareTables import flip
 from collections import namedtuple
 from random import shuffle
+import time
 
 #Piece = namedtuple("Piece", ["index", "piece"])
 
 class Engine:
-    def __init__(self, is_white, max_search_depth):
+    def __init__(self, is_white, max_search_depth, time):
         squares : list[str] = [f'{file}{rank}' for rank in '87654321' for file in 'abcdefgh']
         self.chart = {sq:i for i, sq in enumerate(squares)}
         self.best_move = "abc"
         self.current_player = is_white #True if it's white's turn, False for black
         self.max_depth = max_search_depth
+        self.time_left = time
 
     def algebraic_to_index(self, move): #algebraic -> indexes; must be in standard notation; "e2e4", "Qh6g7+"
         return [self.chart[ele] for ele in [move[i - 1 : i + 1] for i, char in enumerate(move) if char in '12345678']]
     
     def index_to_algebraic(self, move):
-        return "".join("abcdefgh"[index % 8] + "87654321"[index // 8] for index in move)
+        return "".join("abcdefgh"[index % 8] + "87654321"[index // 8] for index in [move.start, move.end])
     
     def get_legal_moves(self, is_white, board):
         pieces = [[i, square] for i, square in enumerate(board) if type(square) != str]
@@ -33,9 +35,11 @@ class Engine:
         return moves   
     
     def find_best_move(self, board): 
+        start_time = time.time_ns() 
         depth = self.max_depth
         score = self.negamax(depth, 1 if self.current_player else -1, float('-inf'), float('inf'), board)
         board.update_board(self.make_move(board.board, self.best_move)[1])
+        self.time_left -= (time.time_ns() - start_time) // 1_000_000
         #return self.make_move(board.board, self.best_move)[1]
     
     def negamax(self, depth : int, colour : int, alpha : float, beta : float, board : Board):
@@ -70,3 +74,6 @@ class Engine:
         board[move.end] = board[move.start]
         board[move.start] = ' '
         return initial_board, board, move.weight
+    
+    def check_end_condition(self, board):
+        pass
