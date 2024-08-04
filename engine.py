@@ -1,7 +1,8 @@
+from ast import Tuple
 from curses.ascii import isalpha
 from copy import deepcopy
 from board import Board
-import pieces
+from pieces import MOVE
 from pieceSquareTables import flip
 from collections import namedtuple
 from random import shuffle
@@ -10,7 +11,7 @@ import time
 #Piece = namedtuple("Piece", ["index", "piece"])
 
 class Engine:
-    def __init__(self, is_white, max_search_depth, time):
+    def __init__(self, is_white, max_search_depth, time) -> None:
         squares : list[str] = [f'{file}{rank}' for rank in '87654321' for file in 'abcdefgh']
         self.chart = {sq:i for i, sq in enumerate(squares)}
         self.best_move = "abc"
@@ -18,13 +19,11 @@ class Engine:
         self.max_depth = max_search_depth
         self.time_left = time
 
-    def algebraic_to_index(self, move): #algebraic -> indexes; must be in standard notation; "e2e4", "Qh6g7+"
-        return [self.chart[ele] for ele in [move[i - 1 : i + 1] for i, char in enumerate(move) if char in '12345678']]
     
-    def index_to_algebraic(self, move):
+    def index_to_algebraic(self, move) -> str:
         return "".join("abcdefgh"[index % 8] + "87654321"[index // 8] for index in [move.start, move.end])
     
-    def get_legal_moves(self, is_white, board):
+    def get_legal_moves(self, is_white, board) -> list[MOVE]:
         pieces = [[i, square] for i, square in enumerate(board) if type(square) != str]
         pieces = [piece for piece in pieces if piece[1].is_white] if is_white else [piece for piece in pieces if not piece[1].is_white]
         moves = []
@@ -32,9 +31,10 @@ class Engine:
             piece.index = index
             for move in piece.get_moves(board):
                 moves += [move]
-        return moves   
+        shuffle(moves)
+        return moves
     
-    def find_best_move(self, board): 
+    def find_best_move(self, board) -> None: 
         start_time = time.time_ns() 
         depth = self.max_depth
         score = self.negamax(depth, 1 if self.current_player else -1, float('-inf'), float('inf'), board)
@@ -42,12 +42,12 @@ class Engine:
         self.time_left -= (time.time_ns() - start_time) // 1_000_000
         #return self.make_move(board.board, self.best_move)[1]
     
-    def negamax(self, depth : int, colour : int, alpha : float, beta : float, board : Board):
+    def negamax(self, depth : int, colour : int, alpha : float, beta : float, board : Board) -> int:
         if depth == 0:
             return colour * board.evaluate_board()
         
         legal_moves = self.get_legal_moves(colour == 1, board.board)
-        shuffle(legal_moves)
+
         best_score = float('-inf')
 
         for move in legal_moves:
@@ -55,7 +55,7 @@ class Engine:
             
             board.update_board(new_board)
 
-            score = -(self.negamax(depth - 1, -colour, -beta, -alpha, board) + colour * weight)
+            score = -(self.negamax(depth - 1, -colour, -beta, -alpha, board) + colour * weight) 
 
             board.update_board(old_board)
 
@@ -69,7 +69,7 @@ class Engine:
                 break
         return best_score
 
-    def make_move(self, initial_board, move):
+    def make_move(self, initial_board, move) -> tuple[list, list, int]:
         board = deepcopy(initial_board)
         board[move.end] = board[move.start]
         board[move.start] = ' '

@@ -14,8 +14,19 @@ from collections import namedtuple
 #    48, 49, 50, 51, 52, 53, 54, 55,
 #    56, 57, 58, 59, 60, 61, 62, 63
 #]
+
+'''
+Move format:
+------------
+
+The move format is in long algebraic notation.
+A nullmove from the Engine to the GUI should be sent as 0000.
+Examples:  e2e4, e7e5, e1g1 (white short castling), e7e8q (for promotion)
+'''
+
+
 MOVE = namedtuple("MOVE", ["start", "end", "weight"])
-CAPTURE_MULTIPLIER = 50
+CAPTURE_MULTIPLIER = 1000
 
 
 class Moves:
@@ -132,7 +143,7 @@ class Moves:
         
     
     @staticmethod
-    def getPawnMoves(index, is_white, hasMoved): #en-Passant
+    def getPawnMoves(index, is_white, hasMoved): #en-Passant needs to be added
         start_square = Moves.board[index]
         moves : list[int] = [-8, -16] if is_white else [+8, +16]
         moves = moves[:1] if hasMoved else moves
@@ -147,13 +158,13 @@ class Moves:
                 continue
 
             end_square = Moves.board[i]
-            if end_square != " ":
+
+            if move in takes and end_square != " ":
                 if end_square.is_white != start_square.is_white:
                     possible += [MOVE(index, i, end_square.value * CAPTURE_MULTIPLIER)]
-                continue
-            if move in takes:
-                continue
-            possible += [MOVE(index, i, 0)]
+            
+            elif move in moves and end_square == " ":
+                possible += [MOVE(index, i, 0)]
 
         return possible
     

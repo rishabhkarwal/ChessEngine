@@ -13,16 +13,20 @@ def main():
     game = Board(board)
     w_time, b_time = 60000, 60000 #time is given in milliseconds
 
-    
-    nyx = Engine(False, 2, b_time)
+    nyx = Engine(False, 3, b_time)
     kyrios = Engine(True, 3, w_time)
     
+
+    game.draw_board()
+    print("\n")
+    print("--- START ---".center(33))
     game.draw_board()
     print("\n\n")
-    for i in range(1, 50):
-        print("MOVE", i)
-        for eng in kyrios, nyx:
-            eng.find_best_move(game)
+    print("\n")
+    for i in range(1, 52):
+        print(f"--- MOVE {i} ---".center(33))
+        for bot in kyrios, nyx:
+            bot.find_best_move(game)
         
         game.draw_board()
         #game.check_game_over()
@@ -32,7 +36,5 @@ def main():
         game.update_pgn(f'{i}. {w_move} {b_move} ')
         print("\n\n")
 
-
- 
 if __name__ == '__main__':
     main()

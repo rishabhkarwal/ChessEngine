@@ -1,3 +1,5 @@
+'''
+
 a = [
      0,  1,  2,  3,  4,  5,  6,  7,
      8,  9, 10, 11, 12, 13, 14, 15,
@@ -22,13 +24,22 @@ b = [
 n = 8
 
 m = 6
+
 print(a[m])
 print(b[m//n][m%n])
 print(m, m//n, m%n)
 
 print(b[7 - m//n][7 - m%n])
 print(a[(7 - m//n) * 8 + (7 - m % n)])
+'''
 
 
+from random import shuffle
 
+x = [1, 2, 3, 4, 5]
+shuffle(x)
+print(x)
 
+class A:
+    def __init__(self) -> None:
+        pass
