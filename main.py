@@ -27,6 +27,7 @@ def main():
         print(f"--- MOVE {i} ---".center(33))
         for bot in kyrios, nyx:
             bot.find_best_move(game)
+            #time.sleep(5)
         
         game.draw_board()
         #game.check_game_over()

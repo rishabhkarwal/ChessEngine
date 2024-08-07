@@ -223,7 +223,7 @@ class Piece:
 
 class Queen: #Q
     def __init__(self, index, is_white):
-        self.value = 900 #if is_white else -9
+        self.value = 9 #900
         self.symbol = "Q" if is_white else "q"
         self.index = index
         self.is_white = is_white
@@ -235,7 +235,7 @@ class Queen: #Q
     
 class King: #K
     def __init__(self, index, is_white):
-        self.value = 200000# if is_white else -900
+        self.value = 20000 #20000
         self.symbol = "K" if is_white else "k"
         self.index = index
         self.is_white = is_white
@@ -248,7 +248,7 @@ class King: #K
 
 class Rook: #R
     def __init__(self, index, is_white) -> None:
-        self.value = 500# if is_white else -5
+        self.value = 5# 500
         self.symbol = "R" if is_white else "r"
         self.index = index
         self.is_white = is_white
@@ -261,7 +261,7 @@ class Rook: #R
     
 class Pawn: #P
     def __init__(self, index, is_white) -> None:
-        self.value = 100 #if is_white else -1
+        self.value = 1 #100
         self.symbol = "P" if is_white else "p"
         self.index = index
         self.is_white = is_white
@@ -275,7 +275,7 @@ class Pawn: #P
     
 class Knight: #N
     def __init__(self, index, is_white) -> None:
-        self.value = 320# if is_white else -3
+        self.value = 3 #320
         self.symbol = "N" if is_white else "n"
         self.index = index
         self.is_white = is_white
@@ -288,7 +288,7 @@ class Knight: #N
     
 class Bishop: #B
     def __init__(self, index, is_white) -> None:
-        self.value = 330 #if is_white else -3
+        self.value = 3 #330
         self.symbol = "B" if is_white else "b"
         self.index = index
         self.is_white = is_white

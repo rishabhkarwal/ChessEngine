@@ -31,7 +31,9 @@ class Engine:
             piece.index = index
             for move in piece.get_moves(board):
                 moves += [move]
-        shuffle(moves)
+        moves = sorted(moves, key = lambda x: x.weight, reverse = True)
+        if moves[0].weight == 0: shuffle(moves) #if all moves are weighted 0, just shuffle randomly
+
         return moves
     
     def find_best_move(self, board) -> None: 
